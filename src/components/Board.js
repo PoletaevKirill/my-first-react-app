@@ -1,5 +1,6 @@
 import React from "react";
 import Square from "./Square";
+import {calculateWinner} from "../helpers/game";
 
 export default class Board extends React.Component {
   constructor(props) {
@@ -10,9 +11,14 @@ export default class Board extends React.Component {
     }
   }
 
-  handleClick(i){
+  handleClick(i) {
     const squares = [...this.state.squares];
-    squares[i] = this.state.xIsNext ? 'X' :  'O';
+
+    if(calculateWinner(this.state.squares) || squares[i]){
+      return;
+    }
+
+    squares[i] = this.state.xIsNext ? 'X' : 'O';
     this.setState({
       squares: squares,
       xIsNext: !this.state.xIsNext
@@ -27,7 +33,14 @@ export default class Board extends React.Component {
   }
 
   render() {
-    const status = 'Следующий ход: ' + (this.state.xIsNext ? 'X' : 'O');
+    const winner = calculateWinner(this.state.squares)
+    let status;
+
+    if (winner) {
+      status = `Выиграл: ${winner}`
+    } else {
+      status = `Следующий ход: ${this.state.xIsNext ? 'X' : 'O'}`
+    }
 
     return (
       <div>
