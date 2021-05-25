@@ -14,7 +14,7 @@ export default class Board extends React.Component {
   handleClick(i) {
     const squares = [...this.state.squares];
 
-    if(calculateWinner(this.state.squares) || squares[i]){
+    if (calculateWinner(this.state.squares) || squares[i]) {
       return;
     }
 
@@ -36,9 +36,13 @@ export default class Board extends React.Component {
     const winner = calculateWinner(this.state.squares)
     let status;
 
-    if (winner) {
-      status = `Выиграл: ${winner}`
-    } else {
+    if (winner === 'draw') {
+      status = `Победила дружба!`
+    }
+    if (winner && winner !== 'draw') {
+      status = `Победа достается "${winner}"`
+    }
+    if (!winner) {
       status = `Следующий ход: ${this.state.xIsNext ? 'X' : 'O'}`
     }
 
