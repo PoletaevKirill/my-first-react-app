@@ -10,18 +10,16 @@ export default class Board extends React.Component {
     />);
   }
 
-  renderBoard(x = 3, y = 3) {
-    let index = 0
+  renderBoard() {
+    const rows = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
     return (
       <div>
         {
-          Array(x).fill(null).map((row, rowIndex) => {
+          rows.map((row, rowIndex) => {
             return (
               <div className="board-row" key={rowIndex.toString()}>
                 {
-                  Array(y).fill(null).map(_ => {
-                    return this.renderSquare(index++)
-                  })
+                  row.map(i => this.renderSquare(i))
                 }
               </div>
             )
@@ -33,7 +31,7 @@ export default class Board extends React.Component {
 
   render() {
     return (
-      this.renderBoard(3, 3)
+      this.renderBoard()
     );
   }
 }
