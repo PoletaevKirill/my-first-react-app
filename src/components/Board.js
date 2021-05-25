@@ -1,70 +1,39 @@
 import React from "react";
 import Square from "./Square";
-import {calculateWinner} from "../helpers/game";
 
 export default class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      squares: Array(9).fill(null),
-      xIsNext: true,
-    }
-  }
-
-  handleClick(i) {
-    const squares = [...this.state.squares];
-
-    if (calculateWinner(this.state.squares) || squares[i]) {
-      return;
-    }
-
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
-    this.setState({
-      squares: squares,
-      xIsNext: !this.state.xIsNext
-    })
-  }
-
   renderSquare(i) {
     return (<Square
-      value={this.state.squares[i]}
-      onClick={() => this.handleClick(i)}
+      key={'col_' + i.toString()}
+      value={this.props.squares[i]}
+      onClick={() => this.props.onClick(i)}
     />);
   }
 
-  render() {
-    const winner = calculateWinner(this.state.squares)
-    let status;
-
-    if (winner === 'draw') {
-      status = `Победила дружба!`
-    }
-    if (winner && winner !== 'draw') {
-      status = `Победа достается "${winner}"`
-    }
-    if (!winner) {
-      status = `Следующий ход: ${this.state.xIsNext ? 'X' : 'O'}`
-    }
-
+  renderBoard(x = 3, y = 3) {
+    let index = 0
     return (
       <div>
-        <div className="status">{status}</div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {
+          Array(x).fill(null).map((row, rowIndex) => {
+            return (
+              <div className="board-row" key={rowIndex.toString()}>
+                {
+                  Array(y).fill(null).map(_ => {
+                    return this.renderSquare(index++)
+                  })
+                }
+              </div>
+            )
+          })
+        }
       </div>
+    )
+  }
+
+  render() {
+    return (
+      this.renderBoard(3, 3)
     );
   }
 }
